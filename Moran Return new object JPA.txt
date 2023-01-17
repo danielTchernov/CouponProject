@@ -1,0 +1,47 @@
+package com.roytuts.spring.data.jpa.left.right.inner.cross.join.repository;
+
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+
+import com.roytuts.spring.data.jpa.left.right.inner.cross.join.dto.DeptEmpDto;
+import com.roytuts.spring.data.jpa.left.right.inner.cross.join.entity.Employee;
+
+public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
+
+	@Query("SELECT new com.roytuts.spring.data.jpa.left.right.inner.cross.join.dto.DeptEmpDto(d.name, e.name, e.email, e.address) "
+			+ "FROM Department d INNER JOIN d.employees e")
+	List<DeptEmpDto> fetchEmpDeptDataInnerJoin();
+
+	@Query("SELECT new com.roytuts.spring.data.jpa.left.right.inner.cross.join.dto.DeptEmpDto(d.name, e.name, e.email, e.address) "
+			+ "FROM Department d, Employee e")
+	List<DeptEmpDto> fetchEmpDeptDataCrossJoin();
+
+}
+
+package com.roytuts.spring.data.jpa.left.right.inner.cross.join.dto;
+
+public class DeptEmpDto {
+
+	private String empDept;
+	private String empName;
+	private String empEmail;
+	private String empAddress;
+
+	public DeptEmpDto(String empDept, String empName, String empEmail, String empAddress) {
+		this.empDept = empDept;
+		this.empName = empName;
+		this.empEmail = empEmail;
+		this.empAddress = empAddress;
+	}
+
+	//getters and setters
+
+	@Override
+	public String toString() {
+		return "DeptEmpDto [empDept=" + empDept + ", empName=" + empName + ", empEmail=" + empEmail + ", empAddress="
+				+ empAddress + "]";
+	}
+
+}
